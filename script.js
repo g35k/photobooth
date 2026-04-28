@@ -476,7 +476,7 @@ function App() {
       const PAD_X = 22;
       const PAD_TOP = 22;
       const PAD_BETWEEN = 14;
-      const PAD_BOTTOM = 90;
+      const PAD_BOTTOM = 130;
       const stripCanvas = document.createElement('canvas');
       stripCanvas.width = W + PAD_X * 2;
       stripCanvas.height = PAD_TOP + (H * imgUrls.length) + (PAD_BETWEEN * (imgUrls.length - 1)) + PAD_BOTTOM;
