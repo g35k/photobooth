@@ -1,0 +1,642 @@
+/* =========================================
+   CSS Variables & Reset
+   ========================================= */
+:root {
+  --bg-page: #e8e5e0;
+  --bg-booth: #f5f0e8;
+  --bg-booth-dark: #ede8de;
+  --color-text: #2a2520;
+  --color-text-muted: #9a9088;
+  --color-border: #000;
+  --color-step-active: #2a2520;
+  --color-step-inactive: #c8c0b0;
+  --booth-width: min(88vw, 980px);
+  --booth-height: min(84vh, 760px);
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-mono: 'DM Mono', 'Courier New', monospace;
+  --preview-slot-width: 88px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-page);
+  font-family: var(--font-mono);
+  color: var(--color-text);
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================
+   Page wrapper
+   ========================================= */
+.app {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+}
+
+/* =========================================
+   Flash overlay
+   ========================================= */
+.flash-overlay {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.05s ease;
+}
+
+.flash-overlay.active {
+  opacity: 1;
+  transition: opacity 0.05s ease;
+}
+
+/* =========================================
+   Photobooth Stage (wrapper with strip)
+   ========================================= */
+.stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeUp 0.6s ease forwards;
+}
+
+.stage::after {
+  content: '';
+  width: var(--preview-slot-width);
+  flex: 0 0 var(--preview-slot-width);
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   Left thumbnail strip
+   ========================================= */
+.strip-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  opacity: 0;
+  animation: fadeIn 0.4s ease 0.1s forwards;
+}
+
+.strip-preview-slot {
+  width: var(--preview-slot-width);
+  flex: 0 0 var(--preview-slot-width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.strip-preview-empty {
+  width: 100%;
+  min-height: 282px;
+  visibility: hidden;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.strip-thumb {
+  width: 88px;
+  height: 66px;
+  object-fit: contain;
+  border: 1.5px solid var(--color-border);
+  background: var(--bg-booth-dark);
+  display: block;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.strip-thumb-placeholder {
+  width: 88px;
+  height: 66px;
+  border: 1.5px dashed var(--color-border);
+  background: transparent;
+}
+
+/* =========================================
+   Booth Frame
+   ========================================= */
+.booth-outer {
+  width: var(--booth-width);
+  height: var(--booth-height);
+  padding: 12px;
+  border: 4px dashed var(--color-border);
+  background: transparent;
+  position: relative;
+}
+
+.booth-inner {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-booth);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* =========================================
+   Screen transitions
+   ========================================= */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.screen.visible {
+  opacity: 1;
+}
+
+/* =========================================
+   Home Screen
+   ========================================= */
+.home-screen {
+  gap: 18px;
+  text-align: center;
+  padding: 20px 24px 28px;
+}
+
+.home-text {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4vw, 56px);
+  font-weight: 400;
+  color: var(--color-text);
+  letter-spacing: 0.02em;
+  user-select: none;
+  cursor: default;
+}
+
+.home-sub {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1.2vw, 16px);
+  font-weight: 300;
+  color: var(--color-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+
+.home-film-options {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 8px;
+  width: min(100%, 320px);
+}
+
+.home-film-btn {
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1.4vw, 16px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  padding: 14px 18px;
+  border: 2px solid var(--color-text);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.home-film-btn:hover {
+  background: var(--color-text);
+  color: var(--bg-booth);
+}
+
+/* =========================================
+   Live / Capture Screen
+   ========================================= */
+.top-label {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 1.8vw, 30px);
+  font-style: italic;
+  color: var(--color-text);
+  letter-spacing: 0.02em;
+  z-index: 10;
+}
+
+.countdown-overlay {
+  position: absolute;
+  inset: 64px 40px 96px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.countdown-number {
+  width: 124px;
+  height: 124px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.92);
+  background: rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 72px;
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease;
+}
+
+@keyframes countPulse {
+  0% { transform: scale(1.3); opacity: 0; }
+  30% { opacity: 1; }
+  80% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+/* Webcam + optional grain overlay */
+.webcam-stack {
+  position: absolute;
+  inset: 64px 40px 96px 40px;
+  z-index: 1;
+  background: var(--bg-booth);
+  border: none;
+  box-shadow: none;
+  outline: none;
+  overflow: hidden;
+}
+
+.webcam-video {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: var(--bg-booth);
+  display: block;
+  transform: scaleX(-1); /* mirror */
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.captured-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: var(--bg-booth);
+  display: block;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.webcam-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.62;
+  mix-blend-mode: multiply;
+  background-color: rgba(118, 160, 106, 0.2);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 48px 48px;
+  transform: scaleX(-1);
+}
+
+.webcam-grain-color_film {
+  background-color: rgba(112, 162, 98, 0.24);
+}
+
+.webcam-grain-sepia {
+  background-color: rgba(128, 107, 74, 0.18);
+}
+
+.webcam-grain-bw {
+  background-color: rgba(120, 120, 120, 0.2);
+}
+
+/* Photo label bottom right */
+.photo-label {
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 300;
+  color: #111;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 999px;
+  padding: 5px 11px;
+  backdrop-filter: blur(1px);
+  z-index: 10;
+}
+
+/* Retake button bottom left */
+.retake-btn {
+  position: absolute;
+  bottom: 10px;
+  left: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-step-inactive);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.retake-btn:hover {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+
+.retake-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* =========================================
+   Loading Screen
+   ========================================= */
+.loading-screen {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-booth);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.spinner {
+  width: 72px;
+  height: 72px;
+  position: relative;
+}
+
+.loading-message {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--color-text);
+  letter-spacing: 0.05em;
+}
+
+/* Minimal sunburst / asterisk spinner */
+.spinner-lines {
+  width: 100%;
+  height: 100%;
+  animation: spinSlow 2s linear infinite;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================
+   Final Screen
+   ========================================= */
+.final-screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.final-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 48px;
+  margin-bottom: 56px;
+  max-height: calc(100% - 120px);
+}
+
+.final-strip {
+  background: #fff;
+  padding: 14px 14px 48px 14px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.final-strip img {
+  width: 186px;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--color-border);
+}
+
+.final-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-left: 22px;
+}
+
+.final-actions-title {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2vw, 34px);
+  font-style: italic;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+
+.final-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 16.5px;
+  font-weight: 300;
+  color: #111;
+  letter-spacing: 0.04em;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.final-action-btn:hover {
+  color: #111;
+}
+
+.final-action-btn .btn-icon {
+  font-size: 19.5px;
+  width: 27px;
+  text-align: center;
+  line-height: 1;
+}
+
+.last-strip-corner {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  width: 86px;
+  opacity: 0.9;
+}
+
+.last-strip-corner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+  background: #fff;
+}
+
+.customize-strip-preview {
+  width: 186px;
+  height: 140px !important;
+  max-height: none;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--color-border) !important;
+}
+
+.customize-empty {
+  width: 170px;
+  min-height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.color-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 4px 0 10px;
+  max-width: 230px;
+}
+
+.color-chip {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid #111;
+  cursor: pointer;
+}
+
+.color-chip.active {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+}
+
+.color-chip.white { background: #ffffff; }
+.color-chip.cream { background: #f5f0e8; }
+.color-chip.pink { background: #f4dfe6; }
+.color-chip.mint { background: #dfeee2; }
+.color-chip.black { background: #1f1f1f; }
+.color-chip.lavender { background: #e7e2ff; }
+.color-chip.peach { background: #f8dfcf; }
+.color-chip.sky { background: #d8ecff; }
+.color-chip.sage { background: #d8e6d3; }
+.color-chip.butter { background: #fff3bf; }
+.color-chip.bw-polka {
+  background-color: #fff;
+  background-image: radial-gradient(#1f1f1f 16%, transparent 17%);
+  background-size: 10px 10px;
+}
+.color-chip.sky-stripes {
+  background-image: repeating-linear-gradient(180deg, #dbefff 0 7px, #ffffff 7px 14px);
+}
+.color-chip.pink-stripes {
+  background-image: repeating-linear-gradient(180deg, #f9dce8 0 7px, #ffffff 7px 14px);
+}
+.color-chip.mint-checker {
+  background-image:
+    linear-gradient(45deg, #dff1e3 25%, transparent 25%),
+    linear-gradient(-45deg, #dff1e3 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #dff1e3 75%),
+    linear-gradient(-45deg, transparent 75%, #dff1e3 75%);
+  background-size: 12px 12px;
+  background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+  background-color: #fff;
+}
+.color-chip.charcoal-grid {
+  background-color: #ececec;
+  background-image:
+    linear-gradient(#2b2b2b 1px, transparent 1px),
+    linear-gradient(90deg, #2b2b2b 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+/* =========================================
+   Animated fade for screen transitions
+   ========================================= */
+.fade-enter {
+  animation: fadeIn 0.35s ease forwards;
+}
+
+/* Grain texture overlay on booth */
+.booth-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 50;
+  mix-blend-mode: multiply;
+}
