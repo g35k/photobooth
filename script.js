@@ -338,10 +338,30 @@ function App() {
     canvas.height = H;
     const ctx = canvas.getContext('2d');
     ctx.filter = filterStr;
-    // Mirror the image (since video is mirrored with CSS)
+    // Crop source to 4:3 before drawing so we avoid horizontal/vertical squeezing.
+    const sourceW = video.videoWidth || W;
+    const sourceH = video.videoHeight || H;
+    const targetAspect = W / H;
+    const sourceAspect = sourceW / sourceH;
+    let sx = 0;
+    let sy = 0;
+    let sw = sourceW;
+    let sh = sourceH;
+
+    if (sourceAspect > targetAspect) {
+      // Source too wide -> trim left/right.
+      sw = sourceH * targetAspect;
+      sx = (sourceW - sw) / 2;
+    } else if (sourceAspect < targetAspect) {
+      // Source too tall -> trim top/bottom.
+      sh = sourceW / targetAspect;
+      sy = (sourceH - sh) / 2;
+    }
+
+    // Mirror final image (to match live preview) after aspect-correct crop.
     ctx.translate(W, 0);
     ctx.scale(-1, 1);
-    ctx.drawImage(video, 0, 0, W, H);
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, W, H);
     addFilmGrainToCanvas(canvas, grainAmountForMode(mode));
     return canvas.toDataURL('image/jpeg', 0.92);
   }, [filmMode]);
@@ -591,6 +611,9 @@ function App() {
             {/* ── HOME ── */}
             {step === STEPS.HOME && (
               <div className="screen visible fade-enter home-screen">
+                <span className="home-star star-a" aria-hidden>★</span>
+                <span className="home-star star-b" aria-hidden>★</span>
+                <span className="home-star star-c" aria-hidden>★</span>
                 <div className="home-text">photobooth</div>
                 <p className="home-sub">choose a film</p>
                 <div className="home-film-options">

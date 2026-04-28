@@ -14,7 +14,7 @@
   --booth-height: min(84vh, 760px);
   --font-display: 'DM Serif Display', Georgia, serif;
   --font-mono: 'DM Mono', 'Courier New', monospace;
-  --preview-slot-width: 88px;
+  --preview-slot-width: 96px;
 }
 
 *, *::before, *::after {
@@ -126,8 +126,9 @@ html, body {
 }
 
 .strip-thumb {
-  width: 88px;
-  height: 66px;
+  width: 96px;
+  height: auto;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   object-position: center;
   border: 1.5px solid var(--color-border);
@@ -138,8 +139,9 @@ html, body {
 }
 
 .strip-thumb-placeholder {
-  width: 88px;
-  height: 66px;
+  width: 96px;
+  height: auto;
+  aspect-ratio: 4 / 3;
   border: 1.5px dashed var(--color-border);
   background: transparent;
 }
@@ -190,9 +192,47 @@ html, body {
    Home Screen
    ========================================= */
 .home-screen {
+  position: relative;
   gap: 18px;
   text-align: center;
   padding: 20px 24px 28px;
+}
+
+.home-star {
+  position: absolute;
+  font-size: 122px;
+  line-height: 1;
+  color: #000;
+  user-select: none;
+  pointer-events: none;
+  transform-origin: center;
+  animation: starStopMotion 1s steps(1, end) infinite alternate;
+}
+
+.star-a {
+  top: -82px;
+  left: -74px;
+  font-size: 128px;
+  animation-delay: 0s;
+}
+
+.star-b {
+  top: -72px;
+  right: -86px;
+  font-size: 138px;
+  animation-delay: 0.25s;
+}
+
+.star-c {
+  bottom: -96px;
+  left: 10%;
+  font-size: 114px;
+  animation-delay: 0.5s;
+}
+
+@keyframes starStopMotion {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(30deg); }
 }
 
 .home-text {
