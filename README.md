@@ -10,8 +10,6 @@ Take 4 shots, choose a film look, customize the strip frame, and download your f
 
 ## Demo Preview
 
-> Add screenshots once ready.
-
 - Home screen: `./screenshots/home.png`
 - Live capture screen: `./screenshots/live-capture.png`
 - Final strip screen: `./screenshots/final-strip.png`
